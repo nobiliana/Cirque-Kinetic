@@ -4,6 +4,7 @@ initial testing with online C compilers. integration with zmk/qmk converters req
 
 #include <stdio.h>
 #include <math.h>
+#include "cirque_kinetic.h"
 
 //friction, needs grav constant. a = gu
 const float grav = 9.82;

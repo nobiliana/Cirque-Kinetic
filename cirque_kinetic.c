@@ -1,5 +1,8 @@
 /*
 initial testing with online C compilers. integration with zmk/qmk converters required, and change variables to be time vs. loop based.
+
+add functionality for friction modifiers and keys, high and low friction to allow long glide or fast stop. 
+    Change primary functionality of friction to be less x/y based and mainly magnitude, so Radial can be passed in. 
 */
 
 #include <stdio.h>
@@ -24,22 +27,6 @@ int LIFTOFF = 0; //1 being contact, 0 being finger off.
 int liftTest = 3; //phase 2 test, 2 lift test. lift 1 will reset same xVal and yVal, lift 2 will change angle. 
 //test loop end
 
-
-
-//friction function
-float kineticDrag (float vecAngle, float vecMagn){
-    if (vecMagn - grav*friction <=0){
-        xVal = 0;
-        yVal = 0;
-    } else {
-        xVal = cos(vecAngle)*vecMagn; //apply floor to the calculation for final int. 
-        yVal = sin(vecAngle)*vecMagn; //apply floor to the calculation for final int. 
-    }
-    return vecMagn - grav*friction;
-}
-
-
-
 typedef struct {
     int xPoint;
     int yPoint;
@@ -49,6 +36,17 @@ typedef struct {
 
 mouseThings mVector = {0};
 
+//friction function
+float kineticDrag (float vecAngle, float vecMagn){
+    if (vecMagn - grav*friction <=0){
+        mVector.xPoint = 0;
+        mVector.yPoint = 0;
+    } else {
+        mVector.xPoint = cos(vecAngle)*vecMagn; //apply floor to the calculation for final int. 
+        mVector.yPoint = sin(vecAngle)*vecMagn; //apply floor to the calculation for final int. 
+    }
+    return vecMagn - grav*friction;
+}
 
 //inputs to this should be x and y vectors!
 void kineticVector (int xMouse, int yMouse){
@@ -97,28 +95,6 @@ int main()
             if (liftTest > 1 && mVector.magValue < 3) {
                 LIFTOFF = 1;
                 printf("liftoff test. primary loop exit\n");
-            }
-        }
-        
-        //test code branch for reset parameters...
-        liftTest --;
-        if (LIFTOFF){
-            LIFTOFF = 0;
-            loopCount = 0;
-            switch (liftTest) {
-                case 2:
-                    printf("liftTest change, reset, no vector or angle change.\n");
-                    printf("liftTest value: %d\n", liftTest);
-                    xVal = 30;
-                    yVal = 40;
-                    break;
-                case 1:
-                    printf("liftTest change, new vector angle and magnitude. \n");
-                    printf("liftTest value: %d\n", liftTest);
-                    //65, 72, 97
-                    xVal = 65;
-                    yVal = 72;
-                    break;
             }
         }
     }

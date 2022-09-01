@@ -12,21 +12,18 @@ add functionality for friction modifiers and keys, high and low friction to allo
 //indicated in decimal value
 #define friction 0.35
 
-bool LIFTOFF = TRUE; //False being contact, True being finger off. 
-bool kineticInit = TRUE; //variable to initialize the kinetic values before start. "inverted" to make logic more visually correct
-
 mouseThings mVector = {0};
 
 //friction function
 float kineticDrag (float vecAngle, float vecMagn){
-    if (vecMagn - grav*friction <=0){
+    if (vecMagn - ((grav*friction*frictionMultiplier)/100) <=0){
         mVector.xPoint = 0;
         mVector.yPoint = 0;
     } else {
         mVector.xPoint = cos(vecAngle)*vecMagn; //apply floor to the calculation for final int. 
         mVector.yPoint = sin(vecAngle)*vecMagn; //apply floor to the calculation for final int. 
     }
-    return vecMagn - grav*friction;
+    return vecMagn - ((grav*friction*frictionMultiplier)/100);
 }
 
 //inputs to this should be x and y vectors!

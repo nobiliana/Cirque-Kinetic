@@ -9,29 +9,11 @@ add functionality for friction modifiers and keys, high and low friction to allo
 #include <math.h>
 #include "cirque_kinetic.h"
 
-//friction, needs grav constant. a = gu
-const float grav = 9.82;
-const float PI = 3.14159;
-const float rad2deg = 180/PI;
-
-
-//Take Final delta values pre-liftoff, apply kinetic. May need to pull LAST deltas, as liftoff detection may occur at same time of x/y wipe. 
-float xVal = 30; //will be int in the final op, currently a test value. Will be equal to x delta.
-float yVal = 40; //will be int in the final op, currently a test value. Will be equal to y delta. 
-
 //indicated in decimal value
 #define friction 0.35
 
 bool LIFTOFF = TRUE; //False being contact, True being finger off. 
 bool kineticInit = TRUE; //variable to initialize the kinetic values before start. "inverted" to make logic more visually correct
-
-typedef struct {
-    int xPoint;
-    int yPoint;
-    float magValue;
-    float angValue;
-
-} mouseThings;
 
 mouseThings mVector = {0};
 
